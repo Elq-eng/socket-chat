@@ -21,18 +21,21 @@ io.on('connection', (client) => {
     UsuariosClass.agregarPersona( client.id, data.nombre, data.sala )
 
     client.broadcast.to( data.sala ).emit('listarPersona', UsuariosClass.getPersonasPorSala( data.sala ))
+    client.broadcast.to( data.sala ).emit('crearMensaje', crearMensajes( 'Administrador', `${data.nombre} este usuario se conecto` ))
+
 
     callback( UsuariosClass.getPersonasPorSala( data.sala ) )
    })
 
    // crear mensajes
 
-   client.on('crearMensaje', ( data )=> {
+   client.on('crearMensaje', ( data, callback )=> {
 
     let persona = UsuariosClass.getPersona( client.id )
 
     let mensaje = crearMensajes( persona.nombre, data.mensaje)
     client.broadcast.to( persona.sala ).emit('crearMensaje', mensaje)
+    callback( mensaje )
    })
 
 
