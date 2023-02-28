@@ -45,8 +45,15 @@ io.on('connection', (client) => {
 
     console.log( personaBorrada )
 
-    client.broadcast.to( personaBorrada[0].sala ).emit('crearMensaje', crearMensajes( 'Administrador', `${personaBorrada[0].nombre} este usuario se desconecto` ))
-    client.broadcast.to( personaBorrada[0].sala ).emit('listarPersona', UsuariosClass.getPersonasPorSala( personaBorrada[0].sala ))
+    if ( personaBorrada.length !== 0)
+    {
+        try{
+        client.broadcast.to( personaBorrada[0].sala ).emit('crearMensaje', crearMensajes( 'Administrador', `${personaBorrada[0].nombre} este usuario se desconecto` ))
+        client.broadcast.to( personaBorrada[0].sala ).emit('listarPersona', UsuariosClass.getPersonasPorSala( personaBorrada[0].sala ))
+        }catch( err ){
+            console.log( err )
+        }
+    }
 
    })
 
